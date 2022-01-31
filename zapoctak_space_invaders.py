@@ -40,20 +40,23 @@ def draw_rocket(x,y):
 
 is_running=True
 while is_running:
-    #screen.fill(black)
+    screen.fill(black)
     
     for event in pygame.event.get():
         if event.type==pygame.QUIT:
             is_running=False
         if event.type==pygame.KEYDOWN:
-            if event.type==pygame.K_LEFT: #or event.type==pygame.K_a:
+            if event.key==pygame.K_LEFT or event.key==pygame.K_a:
                 rocketX_change=-10
-            if event.type==pygame.K_RIGHT:# or event.type==pygame.K_d:
+            if event.key==pygame.K_RIGHT or event.key==pygame.K_d:
                 rocketX_change=10
-            if event.type==pygame.K_SPACE:
+            if event.key==pygame.K_SPACE:
                 #vystřel
                 if not bullet_fired:
                     pass
+        if event.type==pygame.KEYUP:
+            if event.key==pygame.K_LEFT or event.key==pygame.K_a or event.key==pygame.K_RIGHT or event.key==pygame.K_d:
+                rocketX_change=0
 
     rocketX+=rocketX_change
     if rocketX>=width:
