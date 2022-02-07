@@ -29,6 +29,12 @@ rocketX_change=7    #horizontal velocity of rocket
 bulletY_change=18   #vertical velocity of rocket
 bombsY_change=5     #vertical veloctiy of bombs
 
+#constants depending on used images
+bomb_width=7
+bullet_width=3
+enemy_width=64
+rocket_width=40
+
 score=0
 best_score=[]
 direction=""
@@ -48,8 +54,8 @@ bullet_fired=False
 text1=pygame.font.Font("bebas.ttf",30)
 text2=pygame.font.Font("bebas.ttf",70)
 
-#generating new enemies
 def new_enemies(enemies_count):
+    """function for generating new enemies"""
     global enemies,enemiesX,enemiesY,enemiesX_change
     enemies=[]
     enemiesX=[]
@@ -62,8 +68,8 @@ def new_enemies(enemies_count):
         enemiesX_change.append(random.choice((-enemies_speed,enemies_speed)))
     #we get 4 arrays full of information of enemies
 
-#function for generating bombs
 def new_bombs():
+    """function for generating bombs"""
     global bombs,bombs_count,bombsX,bombsY
     bombsX=[]
     bombsY=[]
@@ -71,8 +77,8 @@ def new_bombs():
     bombs_count=0
 
 #add_bomb is called after some enemy drops bomb
-#it adds a bomb to the game
 def add_bomb(x,y):
+    """function that adds a bomb to the game"""
     global bombs,bombs_count,bombsX,bombsY
     bombs_count+=1
     bombsX.append(x+25)
@@ -97,25 +103,19 @@ def draw_bullet(x,y):
 def draw_bomb(which,x,y):
     screen.blit(bombs[which],(x,y))
 
-#function for collision detection, returns True if a collision happens
 def enemy_bullet_collision(enemyX,enemyY,bulletX,bulletY):
-    if bulletX>=enemyX and bulletX+3<=enemyX+64:
-        if abs(enemyY-bulletY)<30:
-            return True
-        else:
-            return False
-    else:
-        return False
+    """function for collision detection, returns True if a collision happens"""
+    if bulletX>=enemyX and bulletX+bullet_width<=enemyX+enemy_width:
+        return abs(enemyY-bulletY)<30
+    return False
 def rocket_bomb_collision(rocketX,rocketY,bombX,bombY):
-    if bombX>=rocketX and bombX+7<=rocketX+40:
-        if bombY+10>=rocketY:
-            return True
-        else:
-            return False
+    """function for collision detection, returns True if a collision happens"""
+    if bombX>=rocketX and bombX+bomb_width<=rocketX+rocket_width:
+        return bombY+10>=rocketY
     return False
 
-#function for game ending
 def game_over():
+    """function for game ending"""
     global rocketY,is_game_over,bulletY
     #"deletion" of game objects from the screen
     for i in range(enemies_count):
@@ -136,8 +136,8 @@ def game_over():
 
     is_game_over=True
 
-#function for enemies actions
 def enemies_actions():
+    """function for enemies actions"""
     global score, bullet_fired, bulletX, bulletY, bombs_count, enemiesX_change 
     #for all enemies
     for which in range(enemies_count):
@@ -177,8 +177,8 @@ def enemies_actions():
 
         draw_enemy(which,enemiesX[which],enemiesY[which])
         
-#function for bomb actions
 def bombs_actions():
+    """function for bomb actions"""
     global bombs_count
     #for all bombs
     for i in range(bombs_count):
@@ -195,8 +195,8 @@ def bombs_actions():
                 game_over()
                 break
             
-#function for bullet actions
 def bullet_actions():
+    """function for bullet actions"""
     global bullet_fired,bulletX,bulletY
     #if bullet is fired, bullet is drawn and is flying upwards
     if bullet_fired is True:
